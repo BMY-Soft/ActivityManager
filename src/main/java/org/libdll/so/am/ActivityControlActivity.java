@@ -8,9 +8,10 @@ import android.content.Intent;
 import android.content.pm.ComponentInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Property;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 
 public class ActivityControlActivity extends Activity implements View.OnClickListener {
@@ -99,11 +103,58 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 	private void start_activity_from_app_process() {
 		Runtime runtime = Runtime.getRuntime();
 		try {
+			String[] args = new String[] {
+				"app_process",
+				"/system/bin",
+				"com.android.commands.am.Am",
+				"start",
+				String.format("%s/%s", package_name, activity_name)
+			};
+
 			String[] environ = new String[] {
-				"BOOTCLASSPATH=/system/framework/core.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/telephony-common.jar:/system/framework/mms-common.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar:/system/framework/com.intel.multidisplay.jar",
+				"PATH=/system/bin:/sbin",
+				"LD_LIBRARY_PATH=/system/lib",
+				"BOOTCLASSPATH=" + System.getProperty("java.boot.class.path"),
 				"CLASSPATH=/system/framework/am.jar"
 			};
-			runtime.exec(String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name), environ, null);
+			/*
+			Map<String, String> env_map = System.getenv();
+			//env_map.put("CLASSPATH", "/system/framework/am.jar");
+			//Set<String> key_set = env_map.keySet();
+			//Set<String> value_set = env_map.
+			Set<Map.Entry<String, String>> env_set = env_map.entrySet();
+		*/	/*
+			env_set.add(new Map.Entry<String, String>() {
+				@Override
+				public String getKey() {
+					return "CLASSPATH";
+				}
+
+				@Override
+				public String getValue() {
+					return "/system/framework/am.jar";
+				}
+
+				@Override
+				public String setValue(String object) {
+					return null;
+				}
+			});*//*
+			//Map.Entry<String, String>[] env_entries = (Map.Entry<String, String>[])env_set.toArray();
+			Object[] env_entries = env_set.toArray();
+			String[] environ = new String[env_map.size() + 2];
+			for(int i=0; i<environ.length-2; i++) {
+				Map.Entry<String, String> entry = (Map.Entry<String, String>)env_entries[i];
+				environ[i] = String.format("%s=%s", entry.getKey(), entry.getValue());
+				Log.d(entry.getKey(), entry.getValue());
+			}
+			environ[environ.length - 2] = "LD_LIBRARY_PATH=/system/lib";
+			environ[environ.length - 1] = "CLASSPATH=/system/framework/am.jar";
+
+			*/
+			for(String e : environ) System.err.println(e);
+			runtime.exec(args, environ);
+			//runtime.exec(String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name), environ, null);
 		} catch(IOException e) {
 			e.printStackTrace();
 			(new AlertDialog.Builder(this)).setTitle(R.string.title_activity_start_failed).setMessage(e.getMessage()).show();

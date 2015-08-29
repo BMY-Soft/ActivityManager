@@ -7,7 +7,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 //import android.support.v4.app.FragmentActivity;
 //import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,7 +59,6 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		tabhost.addTab(tabhost.newTabSpec("running").setIndicator("Running").setContent(new Intent(this, RunningActivityListActivity.class)));
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -84,15 +83,14 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		return super.onOptionsItemSelected(item);
 	}
 
-
 	public boolean onQueryTextSubmit(String query) {
-		Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
+
 		return true;
 	}
 
 	public boolean onQueryTextChange(String new_text) {
-		Toast.makeText(this, "Net text: " + new_text, Toast.LENGTH_SHORT).show();
-		return true;
+		return false;
 	}
 
 }

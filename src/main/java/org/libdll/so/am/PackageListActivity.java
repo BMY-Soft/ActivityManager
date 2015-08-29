@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class PackageListActivity extends ListActivity implements SearchView.OnQueryTextListener {
+public class PackageListActivity extends ListActivity {
 	//private List<PackageInfo> package_list_info_list = new ArrayList<>();
 
 	private final static Comparator<PackageInfo> package_name_comparator = new Comparator<PackageInfo>() {
@@ -118,7 +118,7 @@ public class PackageListActivity extends ListActivity implements SearchView.OnQu
 		//Log.i("ActionBar", getActionBar() == null ? "N" : "Y");
 	}
 
-
+/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -144,7 +144,7 @@ public class PackageListActivity extends ListActivity implements SearchView.OnQu
 
 		return super.onOptionsItemSelected(item);
 	}
-
+*/
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int pos, long id) {
@@ -158,6 +158,7 @@ public class PackageListActivity extends ListActivity implements SearchView.OnQu
 		startActivity(intent);
 	}
 
+/*
 	public boolean onQueryTextSubmit(String query) {
 		Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
 		return true;
@@ -167,4 +168,5 @@ public class PackageListActivity extends ListActivity implements SearchView.OnQu
 		Toast.makeText(this, "Net text: " + new_text, Toast.LENGTH_SHORT).show();
 		return true;
 	}
+*/
 }
