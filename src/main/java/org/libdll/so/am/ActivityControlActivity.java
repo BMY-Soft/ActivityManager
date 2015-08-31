@@ -8,21 +8,16 @@ import android.content.Intent;
 import android.content.pm.ComponentInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.Property;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 
 public class ActivityControlActivity extends Activity implements View.OnClickListener {
 	private String activity_name;
@@ -103,6 +98,7 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 	private void start_activity_from_app_process() {
 		Runtime runtime = Runtime.getRuntime();
 		try {
+			/*
 			String[] args = new String[] {
 				"app_process",
 				"/system/bin",
@@ -116,7 +112,7 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 				"LD_LIBRARY_PATH=/system/lib",
 				"BOOTCLASSPATH=" + System.getProperty("java.boot.class.path"),
 				"CLASSPATH=/system/framework/am.jar"
-			};
+			};*/
 			/*
 			Map<String, String> env_map = System.getenv();
 			//env_map.put("CLASSPATH", "/system/framework/am.jar");
@@ -152,9 +148,34 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 			environ[environ.length - 1] = "CLASSPATH=/system/framework/am.jar";
 
 			*/
-			for(String e : environ) System.err.println(e);
-			runtime.exec(args, environ);
+			//runtime.exec(args, environ);
 			//runtime.exec(String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name), environ, null);
+
+/*
+			Process root_shell = runtime.exec("su");
+			DataOutputStream shell_stdin = new DataOutputStream(root_shell.getOutputStream());
+			DataInputStream shell_stderr = new DataInputStream(root_shell.getErrorStream());
+			//byte[] buffer = new byte[1024];
+			Log.i("shell_stderr available", String.valueOf(shell_stderr.available()));
+			//Toast.makeText(this, shell_stderr.readUTF(), Toast.LENGTH_SHORT).show();
+			//new String()
+			//BufferedInputStream buffered_shell_stderr = new BufferedInputStream(root_shell.getErrorStream());
+			//buffered_shell_stderr.read(buffer)
+			//java.nio.ByteBuffer.allocate().
+			ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+			ReadableByteChannel shell_stderr_channel = Channels.newChannel(shell_stderr);
+			Log.i("shell_stderr_channel", shell_stderr_channel.toString());
+			shell_stderr_channel.read(buffer);
+			Log.i("buffer", buffer.toString());
+			shell_stderr.
+*/
+
+			RootShell shell = RootShell.get_instance(this);
+			if(shell == null) return;
+			shell.write_line("export PATH=/system/bin:/sbin");
+			shell.write_line("export LD_LIBRARY_PATH=/system/lib");
+			shell.write_line("export CLASSPATH=/system/framework/am.jar");
+			shell.write_line(String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name));
 		} catch(IOException e) {
 			e.printStackTrace();
 			(new AlertDialog.Builder(this)).setTitle(R.string.title_activity_start_failed).setMessage(e.getMessage()).show();

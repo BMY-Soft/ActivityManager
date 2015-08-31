@@ -11,4 +11,9 @@
 	<string name="title_activity_activity_control">Activity Control</string>
 	<string name="title_activity_start_failed">Failed to start activity</string>
 	<string name="get_package_name_failed">Cannot get the package name\nYou may not start this activity correctly</string>
+	<string name="title_run_as_root">Run as root</string>
+	<string name="action_ok">OK</string>
+	<string name="action_cancel">Cancel</string>
+	<string name="password_for_root">Password for root:</string>
+	<string name="authentication_failure">Authentication failure</string>
 </resources>
