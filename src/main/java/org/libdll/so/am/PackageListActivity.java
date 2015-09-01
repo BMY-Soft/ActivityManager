@@ -81,7 +81,7 @@ public class PackageListActivity extends ListActivity {
 		//@Override
 		public void bindView(View view, PackageInfo info) {
 			ImageView icon = (ImageView)view.findViewById(R.id.icon);
-			TextView name = (TextView)view.findViewById(R.id.text_name);
+			TextView name = (TextView)view.findViewById(R.id.name);
 			TextView description = (TextView)view.findViewById(R.id.description);
 			icon.setImageDrawable(info.applicationInfo.loadIcon(getPackageManager()));
 			//name.setText(info.applicationInfo.loadLabel(getPackageManager()).toString());

@@ -12,7 +12,7 @@
 	<string name="component_not_found">Component not found</string>
 	<string name="title_activity_activity_control">Activity Control</string>
 	<string name="title_activity_start_failed">Failed to start activity</string>
-	<string name="get_package_name_failed">Cannot get the package name\nYou may not start this activity correctly</string>
+	<string name="get_package_name_failed">Cannot get the package name</string>
 	<string name="title_run_as_root">Run as root</string>
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancel</string>
@@ -22,4 +22,10 @@
 	<string name="title_activity_about">About</string>
 	<string name="copyright_text">Copyright 2015 libdll.so</string>
 	<string name="license_text">This program is free software; you can redistribute it and/or modify it under the terms of the GNU GPL 2 or any later version.\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</string>
+	<string name="get_scheme_failed">Cannot get scheme data</string>
+	<string name="unknown_scheme">Unknown scheme</string>
+	<string name="unexpected_data_in_activity">You may not start this activity correctly</string>
+	<string name="title_searching">Searching</string>
+	<string name="title_search_result">Search Result for \'%s\'</string>
+	<string name="search_not_match">String \'%s\' did not match any activities</string>
 </resources>

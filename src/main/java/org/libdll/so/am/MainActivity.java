@@ -15,12 +15,14 @@ import android.content.Intent;
 //import android.support.v4.app.FragmentActivity;
 //import android.support.v4.app.FragmentTabHost;
 //import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 public class MainActivity extends TabActivity implements SearchView.OnQueryTextListener {
 	@Override
@@ -97,10 +99,22 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		return super.onOptionsItemSelected(item);
 	}
 
-	public boolean onQueryTextSubmit(String query) {
-		//Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
+	private void search_all_activities(String query) {
+		Intent intent = new Intent(this, ActivityListActivity.class);
+		intent.setData(Uri.fromParts("query", query, null));
+		startActivity(intent);
+	}
 
-		return true;
+	public boolean onQueryTextSubmit(String query) {
+		switch(getTabHost().getCurrentTab()) {
+			case 0:
+				search_all_activities(query);
+				return true;
+			case 1:
+				Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				return false;
+		}
+		return false;
 	}
 
 	public boolean onQueryTextChange(String new_text) {

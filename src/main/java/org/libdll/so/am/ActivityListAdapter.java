@@ -20,10 +20,12 @@ import android.widget.TextView;
 public class ActivityListAdapter extends BaseAdapter {
 	Context context;
 	ActivityInfo[] activity_list;
+	boolean try_to_truncate_activity_name;
 
-	public ActivityListAdapter(Context context, ActivityInfo[] activities) {
+	public ActivityListAdapter(Context context, ActivityInfo[] activities, boolean truncate) {
 		this.context = context;
 		activity_list = activities;
+		try_to_truncate_activity_name = truncate;
 	}
 
 	public int getCount() {
@@ -38,19 +40,23 @@ public class ActivityListAdapter extends BaseAdapter {
 */
 	public void bindView(View view, ActivityInfo info) {
 		ImageView icon = (ImageView)view.findViewById(R.id.icon);
-		TextView name = (TextView)view.findViewById(R.id.text_name);
+		TextView name = (TextView)view.findViewById(R.id.name);
 		TextView description = (TextView)view.findViewById(R.id.description);
 		//icon.setImageResource(info.getIconResource());
 		icon.setImageDrawable(info.loadIcon(context.getPackageManager()));
 		//name.setText(info.name);
 		//name.setText(info.name.substring(info.name.lastIndexOf('.')));
-		name.setText(info.name.indexOf(info.packageName) == 0 ? info.name.substring(info.packageName.length()) : info.name);
+		//name.setText(info.name.indexOf(info.packageName) == 0 ? info.name.substring(info.packageName.length()) : info.name);
+		String display_name;
+		if(try_to_truncate_activity_name && info.name.indexOf(info.packageName) == 0) display_name = info.name.substring(info.packageName.length());
+		else display_name = info.name;
+		name.setText(display_name);
 		// TODO: Get other information of the activity
 		//description.setText(get_description(info));
 		//description.setText(info.permission);
 		//description.setText(info.nonLocalizedLabel);
 		//description.setText(info.loadLabel(context.getPackageManager()));
-		view.setContentDescription(info.name);
+		view.setContentDescription(String.format("%s/%s", info.packageName, info.name));
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
