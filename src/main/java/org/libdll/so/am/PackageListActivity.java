@@ -17,19 +17,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -87,7 +81,7 @@ public class PackageListActivity extends ListActivity {
 		//@Override
 		public void bindView(View view, PackageInfo info) {
 			ImageView icon = (ImageView)view.findViewById(R.id.icon);
-			TextView name = (TextView)view.findViewById(R.id.name);
+			TextView name = (TextView)view.findViewById(R.id.text_name);
 			TextView description = (TextView)view.findViewById(R.id.description);
 			icon.setImageDrawable(info.applicationInfo.loadIcon(getPackageManager()));
 			//name.setText(info.applicationInfo.loadLabel(getPackageManager()).toString());
@@ -111,7 +105,6 @@ public class PackageListActivity extends ListActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			//Log.i("method", String.format("PackageListAdapter::getView(%d, )", position));
 			View r;
 			if (convertView == null) {
 				r = ((LayoutInflater)context.getSystemService(

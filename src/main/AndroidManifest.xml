@@ -32,5 +32,10 @@
 	    android:name=".ActivityControlActivity"
 	    android:label="@string/title_activity_activity_control" >
 	</activity>
+	<activity
+	    android:name=".AboutActivity"
+	    android:label="@string/title_activity_about"
+	    android:theme="@android:style/Theme.DeviceDefault.Dialog">
+	</activity>
 	</application>
 </manifest>

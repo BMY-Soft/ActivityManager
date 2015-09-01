@@ -64,6 +64,11 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		tabhost.addTab(tabhost.newTabSpec("running").setIndicator("Running").setContent(new Intent(this, RunningActivityListActivity.class)));
 	}
 
+	private void show_about() {
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -81,8 +86,12 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings) {
-			return true;
+		switch(id) {
+			case R.id.action_about:
+				show_about();
+				return true;
+			case R.id.action_settings:
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);

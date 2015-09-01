@@ -38,7 +38,7 @@ public class ActivityListAdapter extends BaseAdapter {
 */
 	public void bindView(View view, ActivityInfo info) {
 		ImageView icon = (ImageView)view.findViewById(R.id.icon);
-		TextView name = (TextView)view.findViewById(R.id.name);
+		TextView name = (TextView)view.findViewById(R.id.text_name);
 		TextView description = (TextView)view.findViewById(R.id.description);
 		//icon.setImageResource(info.getIconResource());
 		icon.setImageDrawable(info.loadIcon(context.getPackageManager()));

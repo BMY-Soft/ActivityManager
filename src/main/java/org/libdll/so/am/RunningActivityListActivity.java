@@ -16,7 +16,7 @@ public class RunningActivityListActivity extends ListActivity {
 		//setContentView(R.layout.activity_running_activity_list);
 	}
 
-
+/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -38,4 +38,5 @@ public class RunningActivityListActivity extends ListActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
+*/
 }
