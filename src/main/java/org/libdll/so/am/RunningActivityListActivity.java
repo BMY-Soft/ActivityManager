@@ -1,12 +1,22 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
+import android.app.ActivityManager;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.pm.PackageManager;
-//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import java.util.List;
 
 public class RunningActivityListActivity extends ListActivity {
 
@@ -14,6 +24,9 @@ public class RunningActivityListActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_running_activity_list);
+		//ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+		//List<ActivityManager.RunningTaskInfo> alltasks = am.getRunningTasks(0);
+		//Log.i("list size", String.valueOf(alltasks.size()));
 	}
 
 /*
@@ -32,8 +45,9 @@ public class RunningActivityListActivity extends ListActivity {
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings) {
-			return true;
+		switch(id) {
+			case R.id.action_reload:
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);

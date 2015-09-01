@@ -13,19 +13,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ComponentInfo;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 public class ActivityControlActivity extends Activity implements View.OnClickListener {
 	private String activity_name;
@@ -41,7 +38,7 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		try {
 			path = getIntent().getData().getPath();
 		} catch(NullPointerException e) {
-			Toast.makeText(this, R.string.get_package_name_failed, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, String.format("%s\n%s", getString(R.string.get_component_name_failed), getString(R.string.unexpected_data_in_activity)), Toast.LENGTH_SHORT).show();
 			finish();
 			return;
 		}
@@ -50,12 +47,13 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		activity_name = path.substring(path.lastIndexOf('/') + 1);
 		package_name = path.substring(1, path.lastIndexOf('/'));
 		activity_component_name = new ComponentName(package_name, activity_name);
+		PackageManager pm = getPackageManager();
 		ActionBar action_bar = getActionBar();
 		if(action_bar != null) {
 			//action_bar.setTitle(activity_name);
 			action_bar.setTitle(path.substring(1));
 			try {
-				action_bar.setIcon(getPackageManager().getActivityIcon(activity_component_name));
+				action_bar.setIcon(pm.getActivityIcon(activity_component_name));
 			} catch(PackageManager.NameNotFoundException e) {
 				//e.printStackTrace();
 				Toast.makeText(this, R.string.component_not_found, Toast.LENGTH_SHORT).show();
@@ -68,13 +66,44 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		button_start.setOnClickListener(this);
 		button_start_with_root.setOnClickListener(this);
 		button_killall.setOnClickListener(this);
+
+		ActivityInfo info;
+		try {
+			info = pm.getActivityInfo(activity_component_name, 0);
+		} catch(PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		TextView text_label_value = (TextView)findViewById(R.id.text_label_value);
+		if(info.nonLocalizedLabel != null) text_label_value.setText(info.nonLocalizedLabel);
+		else if(info.labelRes != 0) text_label_value.setText(pm.getText(package_name, info.labelRes, info.applicationInfo));
+
+		TextView text_permission_value = (TextView)findViewById(R.id.text_permission_value);
+		if(info.permission != null) text_permission_value.setText(info.permission);
+
+		TextView text_launch_mode_value = (TextView)findViewById(R.id.text_launch_mode_value);
+		switch(info.launchMode) {
+			case ActivityInfo.LAUNCH_MULTIPLE:
+				text_launch_mode_value.setText(getText(R.string.launch_multiple));
+				break;
+			case ActivityInfo.LAUNCH_SINGLE_TOP:
+				text_launch_mode_value.setText(getText(R.string.launch_single_top));
+				break;
+			case ActivityInfo.LAUNCH_SINGLE_TASK:
+				text_launch_mode_value.setText(getText(R.string.launch_single_task));
+				break;
+			case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
+				text_launch_mode_value.setText(getText(R.string.launch_single_instance));
+				break;
+		}
 	}
 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_activity_detail, menu);
+		getMenuInflater().inflate(R.menu.menu_activity_control, menu);
 		return true;
 	}
 
@@ -83,12 +112,6 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-
-		//noinspection SimplifiableIfStatement
-		if(id == R.id.action_settings) {
-			return true;
-		}
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -202,6 +225,7 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 				start_activity_from_app_process();
 				break;
 			case R.id.button_killall:
+				Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
 				break;
 		}
 	}

@@ -5,6 +5,7 @@
 	<string name="action_settings">Settings</string>
 	<string name="action_search">Search</string>
 	<string name="action_about">About</string>
+	<string name="action_reload">Reload</string>
 	<string name="title_activity_package_list">PackageListActivity</string>
 	<string name="title_activity_running_activity_list">RunningActivityListActivity</string>
 	<string name="title_activity_activity_list">ActivityListActivity</string>
@@ -13,6 +14,7 @@
 	<string name="title_activity_activity_control">Activity Control</string>
 	<string name="title_activity_start_failed">Failed to start activity</string>
 	<string name="get_package_name_failed">Cannot get the package name</string>
+	<string name="get_component_name_failed">Cannot get the component name</string>
 	<string name="title_run_as_root">Run as root</string>
 	<string name="action_ok">OK</string>
 	<string name="action_cancel">Cancel</string>
@@ -28,4 +30,8 @@
 	<string name="title_searching">Searching</string>
 	<string name="title_search_result">Search Result for \'%s\'</string>
 	<string name="search_not_match">String \'%s\' did not match any activities</string>
+	<string name="launch_multiple">Multiple</string>
+	<string name="launch_single_top">Single Top</string>
+	<string name="launch_single_task">Single Task</string>
+	<string name="launch_single_instance">Single Instance</string>
 </resources>

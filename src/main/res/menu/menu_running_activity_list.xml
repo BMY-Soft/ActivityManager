@@ -2,5 +2,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="org.libdll.so.am.RunningActivityListActivity">
-
+<!--
+	<item android:id="@+id/action_reload"
+	  android:title="@string/action_reload"
+	  android:showAsAction="never"/>-->
 </menu>

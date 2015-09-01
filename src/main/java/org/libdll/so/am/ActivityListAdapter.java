@@ -48,8 +48,9 @@ public class ActivityListAdapter extends BaseAdapter {
 		//name.setText(info.name.substring(info.name.lastIndexOf('.')));
 		//name.setText(info.name.indexOf(info.packageName) == 0 ? info.name.substring(info.packageName.length()) : info.name);
 		String display_name;
-		if(try_to_truncate_activity_name && info.name.indexOf(info.packageName) == 0) display_name = info.name.substring(info.packageName.length());
-		else display_name = info.name;
+		if(try_to_truncate_activity_name && info.name.indexOf(info.packageName) == 0 && info.name.charAt(info.packageName.length()) == '.') {
+			display_name = info.name.substring(info.packageName.length());
+		} else display_name = info.name;
 		name.setText(display_name);
 		// TODO: Get other information of the activity
 		//description.setText(get_description(info));
