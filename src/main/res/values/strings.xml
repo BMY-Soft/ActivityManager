@@ -8,6 +8,7 @@
 	<string name="title_activity_running_activity_list">RunningActivityListActivity</string>
 	<string name="title_activity_activity_list">ActivityListActivity</string>
 	<string name="package_not_found">Package not found</string>
+	<string name="component_not_found">Component not found</string>
 	<string name="title_activity_activity_control">Activity Control</string>
 	<string name="title_activity_start_failed">Failed to start activity</string>
 	<string name="get_package_name_failed">Cannot get the package name\nYou may not start this activity correctly</string>
@@ -16,4 +17,5 @@
 	<string name="action_cancel">Cancel</string>
 	<string name="password_for_root">Password for root:</string>
 	<string name="authentication_failure">Authentication failure</string>
+	<string name="shell_terminated">Shell terminated with status %d</string>
 </resources>

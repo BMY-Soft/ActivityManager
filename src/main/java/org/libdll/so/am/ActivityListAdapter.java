@@ -1,3 +1,11 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
 import android.content.Context;
@@ -8,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
 
 public class ActivityListAdapter extends BaseAdapter {
 	Context context;
@@ -37,9 +43,13 @@ public class ActivityListAdapter extends BaseAdapter {
 		//icon.setImageResource(info.getIconResource());
 		icon.setImageDrawable(info.loadIcon(context.getPackageManager()));
 		//name.setText(info.name);
-		name.setText(info.name.substring(info.name.lastIndexOf('.')));
+		//name.setText(info.name.substring(info.name.lastIndexOf('.')));
+		name.setText(info.name.indexOf(info.packageName) == 0 ? info.name.substring(info.packageName.length()) : info.name);
 		// TODO: Get other information of the activity
 		//description.setText(get_description(info));
+		//description.setText(info.permission);
+		//description.setText(info.nonLocalizedLabel);
+		//description.setText(info.loadLabel(context.getPackageManager()));
 		view.setContentDescription(info.name);
 	}
 

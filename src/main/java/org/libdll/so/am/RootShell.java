@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,8 +43,24 @@ public class RootShell {
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		if(shell_stdout.available() == 0) return;
 		byte[] buffer = new byte[32];
+		if(shell_stdout.available() == 0) try {
+			int status = process.exitValue();
+			//String msg = String.format("shell terminated with status %d", status);
+			StringBuilder msg = new StringBuilder();
+			if(shell_stderr.available() > 0) {
+				if(shell_stderr.read(buffer) > 0) {
+					//msg = new String(buffer);
+					msg.append(new String(buffer));
+				}
+			}
+			msg.append(String.format(context.getString(R.string.shell_terminated), status));
+			throw new IOException(msg.toString());
+		} catch(IllegalThreadStateException e) {
+			// Still running
+			//Thread.sleep(100);
+			return;
+		}
 		if(shell_stdout.read(buffer) < 1) return;
 		String result = new String(buffer);
 		//Log.i("result", result.substring(0, 9));
@@ -68,6 +85,7 @@ public class RootShell {
 			//View text_entry = LayoutInflater.from(context).inflate()
 			TextView text_view = new TextView(context);
 			text_view.setText(R.string.password_for_root);
+			text_view.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 			final EditText password_entry = new EditText(context);
 			//password_entry.setTransformationMethod(PasswordTransformationMethod.getInstance());
 			password_entry.setSingleLine(true);
@@ -80,7 +98,7 @@ public class RootShell {
 			AlertDialog.Builder dialog_builder = new AlertDialog.Builder(context);
 			dialog_builder.setTitle(R.string.title_run_as_root);
 			dialog_builder.setView(layout);
-			DialogInterface.OnClickListener on_ok_listener = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener on_ok_click_listener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					//pw.append(password_entry.getText().toString());
@@ -96,7 +114,7 @@ public class RootShell {
 					*/
 				}
 			};
-			DialogInterface.OnClickListener on_cancel_listener = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener on_cancel_click_listener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					password = null;
@@ -105,8 +123,16 @@ public class RootShell {
 					//handler.sendMessage(handler.obtainMessage());
 				}
 			};
-			dialog_builder.setPositiveButton(R.string.action_ok, on_ok_listener);
-			dialog_builder.setNegativeButton(R.string.action_cancel, on_cancel_listener);
+			DialogInterface.OnCancelListener on_cancel_listener = new DialogInterface.OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					password = null;
+					handler.sendEmptyMessage(0);
+				}
+			};
+			dialog_builder.setPositiveButton(R.string.action_ok, on_ok_click_listener);
+			dialog_builder.setNegativeButton(R.string.action_cancel, on_cancel_click_listener);
+			dialog_builder.setOnCancelListener(on_cancel_listener);
 			dialog_builder.create().show();
 			//Intent intent = new Intent(null, PasswordActivity.class);
 			//intent.setClass();
@@ -131,14 +157,13 @@ public class RootShell {
 			shell_stdin.write('\n');
 			System.gc();
 
-			for(int i = 0; i < 100; i++)
-				try {
-					Thread.sleep(10);
-					Log.i("shell_stdout available", String.valueOf(shell_stderr.available()));
-					if(shell_stderr.available() > 0) break;
-				} catch(InterruptedException e) {
-					e.printStackTrace();
-				}
+			for(int i = 0; i < 100; i++) try {
+				Thread.sleep(10);
+				Log.i("shell_stdout available", String.valueOf(shell_stderr.available()));
+				if(shell_stderr.available() > 0) break;
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			}
 			if(shell_stderr.available() == 0) return;
 			int s = shell_stderr.read(buffer);
 			if(s < 1) return;
@@ -174,6 +199,7 @@ public class RootShell {
 	private DataInputStream shell_stdout;
 	private DataInputStream shell_stderr;
 	static private Context context;
+
 	private String password;
 
 	private boolean is_terminated() {
@@ -181,7 +207,7 @@ public class RootShell {
 			process.exitValue();
 			return true;
 		} catch(IllegalThreadStateException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		}
 	}
@@ -193,7 +219,8 @@ public class RootShell {
 	public void quit() {
 		if(is_terminated()) return;
 		try {
-			shell_stdin.writeBytes("exit\n");
+			//shell_stdin.writeBytes("exit\n");
+			write_line("exit");
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

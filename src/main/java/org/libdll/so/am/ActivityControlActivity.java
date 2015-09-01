@@ -1,3 +1,11 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
 import android.app.ActionBar;
@@ -49,7 +57,8 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 			try {
 				action_bar.setIcon(getPackageManager().getActivityIcon(activity_component_name));
 			} catch(PackageManager.NameNotFoundException e) {
-				Toast.makeText(this, R.string.package_not_found, Toast.LENGTH_SHORT).show();
+				//e.printStackTrace();
+				Toast.makeText(this, R.string.component_not_found, Toast.LENGTH_SHORT).show();
 				finish();
 			}
 		}

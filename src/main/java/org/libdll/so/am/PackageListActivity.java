@@ -1,3 +1,11 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
 import android.app.ListActivity;
@@ -82,8 +90,22 @@ public class PackageListActivity extends ListActivity {
 			TextView name = (TextView)view.findViewById(R.id.name);
 			TextView description = (TextView)view.findViewById(R.id.description);
 			icon.setImageDrawable(info.applicationInfo.loadIcon(getPackageManager()));
-			name.setText(info.applicationInfo.loadLabel(getPackageManager()).toString());
-			description.setText(info.packageName);
+			//name.setText(info.applicationInfo.loadLabel(getPackageManager()).toString());
+			name.setText(info.packageName);
+			//description.setText(info.packageName);
+			//description.setText(info.applicationInfo.loadLabel(getPackageManager()).toString());
+			CharSequence label = info.applicationInfo.nonLocalizedLabel;
+			/*
+			if(label != null) description.setText(label);
+			else if(info.applicationInfo.labelRes != 0) {
+				label = getPackageManager().getText(info.packageName, info.applicationInfo.labelRes, info.applicationInfo);
+				if(label != null) description.setText(label.toString().trim());
+			}*/
+			if(label == null && info.applicationInfo.labelRes != 0) {
+				label = getPackageManager().getText(info.packageName, info.applicationInfo.labelRes, info.applicationInfo);
+				if(label != null) label = label.toString().trim();
+			}
+			description.setText(label);
 			view.setContentDescription(info.packageName);
 		}
 

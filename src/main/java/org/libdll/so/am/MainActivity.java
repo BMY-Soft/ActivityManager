@@ -1,9 +1,16 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.TabActivity;
-import android.content.ComponentName;
 import android.content.Intent;
 //import android.support.v4.app.FragmentActivity;
 //import android.support.v4.app.FragmentTabHost;
@@ -14,8 +21,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TabHost;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends TabActivity implements SearchView.OnQueryTextListener {
 	@Override
