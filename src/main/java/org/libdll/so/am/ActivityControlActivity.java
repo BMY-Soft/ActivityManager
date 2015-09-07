@@ -15,11 +15,15 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
@@ -28,6 +32,9 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 	private String activity_name;
 	private String package_name;
 	private ComponentName activity_component_name;
+
+	private CheckBox check_box_data_uri;
+	private EditText edit_text_uri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +51,16 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		}
 		//activity_name = getIntent().getData().getPath();
 		//Log.i(uri.getPath(), uri.getPath());
-		activity_name = path.substring(path.lastIndexOf('/') + 1);
-		package_name = path.substring(1, path.lastIndexOf('/'));
+		int slash_index = path.lastIndexOf('/');
+		//Log.d("slash_index", String.valueOf(slash_index));
+		if(slash_index <= 0) {
+			//Log.d("slash_index", "abort");
+			Toast.makeText(this, String.format("%s\n%s", getString(R.string.get_component_name_failed), getString(R.string.unexpected_data_in_activity)), Toast.LENGTH_SHORT).show();
+			finish();
+			return;
+		}
+		activity_name = path.substring(slash_index + 1);
+		package_name = path.substring(1, slash_index);
 		activity_component_name = new ComponentName(package_name, activity_name);
 		PackageManager pm = getPackageManager();
 		ActionBar action_bar = getActionBar();
@@ -85,18 +100,22 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		TextView text_launch_mode_value = (TextView)findViewById(R.id.text_launch_mode_value);
 		switch(info.launchMode) {
 			case ActivityInfo.LAUNCH_MULTIPLE:
-				text_launch_mode_value.setText(getText(R.string.launch_multiple));
+				text_launch_mode_value.setText(R.string.launch_multiple);
 				break;
 			case ActivityInfo.LAUNCH_SINGLE_TOP:
-				text_launch_mode_value.setText(getText(R.string.launch_single_top));
+				text_launch_mode_value.setText(R.string.launch_single_top);
 				break;
 			case ActivityInfo.LAUNCH_SINGLE_TASK:
-				text_launch_mode_value.setText(getText(R.string.launch_single_task));
+				text_launch_mode_value.setText(R.string.launch_single_task);
 				break;
 			case ActivityInfo.LAUNCH_SINGLE_INSTANCE:
-				text_launch_mode_value.setText(getText(R.string.launch_single_instance));
+				text_launch_mode_value.setText(R.string.launch_single_instance);
 				break;
 		}
+
+		check_box_data_uri = (CheckBox)findViewById(R.id.check_box_data_uri);
+		check_box_data_uri.setOnClickListener(this);
+		edit_text_uri = (EditText)findViewById(R.id.edit_text_uri);
 	}
 
 
@@ -120,6 +139,10 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		Intent intent = new Intent();
 		//intent.setComponent(new ComponentName(package_name, activity_name));
 		intent.setComponent(activity_component_name);
+		if(check_box_data_uri.isChecked()) {
+			Uri uri = Uri.parse(edit_text_uri.getText().toString());
+			intent.setData(uri);
+		}
 		try {
 			startActivity(intent);
 		} catch(RuntimeException e) {
@@ -207,7 +230,13 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 			shell.write_line("export PATH=/system/bin:/sbin");
 			shell.write_line("export LD_LIBRARY_PATH=/system/lib");
 			shell.write_line("export CLASSPATH=/system/framework/am.jar");
-			shell.write_line(String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name));
+			//String command_line = String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name);
+			StringBuilder command_line = new StringBuilder("app_process /system/bin com.android.commands.am.Am start ");
+			if(check_box_data_uri.isChecked()) command_line.append("-d \"").append(edit_text_uri.getText().toString()).append("\" ");
+			command_line.append(package_name).append("/").append(activity_name);
+			Log.d("activity_name", activity_name);
+			//if(check_box_data_uri.isChecked()) command_line.append(" -d ").append(edit_text_uri.getText().toString());
+			shell.write_line(command_line.toString());
 		} catch(IOException e) {
 			e.printStackTrace();
 			(new AlertDialog.Builder(this)).setTitle(R.string.title_activity_start_failed).setMessage(e.getMessage()).show();
@@ -226,6 +255,10 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 				break;
 			case R.id.button_killall:
 				Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.check_box_data_uri:
+				//Log.i("check_box_data_uri", String.valueOf(check_box_data_uri.isChecked()));
+				edit_text_uri.setEnabled(check_box_data_uri.isChecked());
 				break;
 		}
 	}

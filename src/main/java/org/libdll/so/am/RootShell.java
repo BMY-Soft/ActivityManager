@@ -1,3 +1,11 @@
+/*	Activity Manager for Android
+	Copyright 2015 libdll.so
+
+	This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+*/
+
 package org.libdll.so.am;
 
 import android.app.AlertDialog;
@@ -20,6 +28,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
 
 class DialogResultHandler extends Handler {
 	@Override
@@ -198,7 +207,7 @@ public class RootShell {
 	private DataOutputStream shell_stdin;
 	private DataInputStream shell_stdout;
 	private DataInputStream shell_stderr;
-	static private Context context;
+	private static Context context;
 
 	private String password;
 
@@ -238,7 +247,9 @@ public class RootShell {
 	}
 
 	public void write_line(String line) throws IOException {
-		shell_stdin.writeBytes(line);
+		Log.d("method", String.format("org.libdll.so.am.RootShell::write_line(String<%s>)", line));
+		//shell_stdin.writeBytes(line);
+		shell_stdin.write(line.getBytes());	// Using default charset UTF-8
 		shell_stdin.write('\n');
 	}
 }

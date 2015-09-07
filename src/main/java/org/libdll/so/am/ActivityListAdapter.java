@@ -63,8 +63,7 @@ public class ActivityListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View r;
 		if (convertView == null) {
-			r = ((LayoutInflater)context.getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_list_item, parent, false);
+			r = ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.activity_list_item, parent, false);
 		} else {
 			r = convertView;
 		}

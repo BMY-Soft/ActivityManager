@@ -34,4 +34,5 @@
 	<string name="launch_single_top">Single Top</string>
 	<string name="launch_single_task">Single Task</string>
 	<string name="launch_single_instance">Single Instance</string>
+	<string name="checkbox_data_uri">Data Uri: </string>
 </resources>

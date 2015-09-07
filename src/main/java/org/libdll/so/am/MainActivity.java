@@ -105,13 +105,20 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		startActivity(intent);
 	}
 
+	private void search_running_activites(String query) {
+		Intent intent = new Intent(this, RunningActivityListActivity.class);
+		intent.setData(Uri.fromParts("query", query, null));
+		startActivity(intent);
+	}
+
 	public boolean onQueryTextSubmit(String query) {
 		switch(getTabHost().getCurrentTab()) {
 			case 0:
 				search_all_activities(query);
 				return true;
 			case 1:
-				Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				search_running_activites(query);
 				return false;
 		}
 		return false;
