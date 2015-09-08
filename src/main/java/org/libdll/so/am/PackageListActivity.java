@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-//import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,7 +77,6 @@ public class PackageListActivity extends ListActivity {
 			return package_list == null ? 0 : package_list.size();
 		}
 
-		//@Override
 		public void bindView(View view, PackageInfo info) {
 			ImageView icon = (ImageView)view.findViewById(R.id.icon);
 			TextView name = (TextView)view.findViewById(R.id.name);

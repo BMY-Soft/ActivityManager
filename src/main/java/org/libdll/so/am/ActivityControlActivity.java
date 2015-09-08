@@ -151,7 +151,7 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 	}
 
 	private void start_activity_from_app_process() {
-		Runtime runtime = Runtime.getRuntime();
+		//Runtime runtime = Runtime.getRuntime();
 		try {
 			/*
 			String[] args = new String[] {
@@ -232,9 +232,8 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 			shell.write_line("export CLASSPATH=/system/framework/am.jar");
 			//String command_line = String.format("app_process /system/bin com.android.commands.am.Am start %s/%s", package_name, activity_name);
 			StringBuilder command_line = new StringBuilder("app_process /system/bin com.android.commands.am.Am start ");
-			if(check_box_data_uri.isChecked()) command_line.append("-d \"").append(edit_text_uri.getText().toString()).append("\" ");
+			if(check_box_data_uri.isChecked()) command_line.append("-d '").append(edit_text_uri.getText().toString()).append("' ");
 			command_line.append(package_name).append("/").append(activity_name);
-			Log.d("activity_name", activity_name);
 			//if(check_box_data_uri.isChecked()) command_line.append(" -d ").append(edit_text_uri.getText().toString());
 			shell.write_line(command_line.toString());
 		} catch(IOException e) {

@@ -8,8 +8,6 @@
 
 package org.libdll.so.am;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 //import android.support.v4.app.FragmentActivity;
@@ -22,42 +20,12 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.SearchView;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 public class MainActivity extends TabActivity implements SearchView.OnQueryTextListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_main);
-		/*
-		Intent intent = new Intent();
-		//intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.MyTabActivity"));
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsGps"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsView"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsCpAutoTest"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsEpo"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsMap"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsNet"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.LbsMisc"));
-		startActivity(intent);
-		intent.setComponent(new ComponentName("com.mediatek.lbs.em", "com.mediatek.lbs.em.FileBrowser"));
-		startActivity(intent);
-		*/
-		/*
-		FragmentTabHost tabhost = (FragmentTabHost)findViewById(R.id.tabhost);
-		if(tabhost == null) throw new RuntimeException("TabHost ???");
-		//tabhost.setup();
-		tabhost.setup(this, getSupportFragmentManager());
-		*/
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		//ActionBar actionbar = getActionBar();
-		//actionbar.show();
 		TabHost tabhost = getTabHost();
 		//TabHost tabhost = (TabHost)findViewById(R.id.tabhost);
 		//tabhost.setup();
@@ -105,7 +73,7 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 		startActivity(intent);
 	}
 
-	private void search_running_activites(String query) {
+	private void search_running_activities(String query) {
 		Intent intent = new Intent(this, RunningActivityListActivity.class);
 		intent.setData(Uri.fromParts("query", query, null));
 		startActivity(intent);
@@ -118,7 +86,7 @@ public class MainActivity extends TabActivity implements SearchView.OnQueryTextL
 				return true;
 			case 1:
 				//Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
-				search_running_activites(query);
+				search_running_activities(query);
 				return false;
 		}
 		return false;
