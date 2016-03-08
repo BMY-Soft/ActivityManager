@@ -10,8 +10,10 @@ package org.libdll.so.am;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -27,6 +29,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class ActivityControlActivity extends Activity implements View.OnClickListener {
 	private String activity_name;
@@ -242,6 +247,49 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 		}
 	}
 
+	private void kill() {
+		ActivityManager system_am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		List<ActivityManager.RunningTaskInfo> alltasks = system_am.getRunningTasks(Integer.MAX_VALUE);
+		Class<?> am_class;
+		Method removetask;
+		try {
+			am_class = Class.forName("android.app.ActivityManager");
+		} catch(ClassNotFoundException e) {
+			e.printStackTrace();
+			(new AlertDialog.Builder(this)).setTitle(e.getClass().getName()).setMessage(e.getMessage()).show();
+			return;
+		}
+		try {
+			//removetask = am_class.getMethod("removeTask", new Class[] { Integer.class, Integer.class });
+			removetask = am_class.getMethod("removeTask", new Class[] { int.class, int.class });
+		} catch(NoSuchMethodException e) {
+			e.printStackTrace();
+			(new AlertDialog.Builder(this)).setTitle(e.getClass().getName()).setMessage(e.getMessage()).show();
+			return;
+		}
+		PackageManager pm = getPackageManager();
+		for(ActivityManager.RunningTaskInfo task_info : alltasks) {
+			ActivityInfo activity_info = null;
+			try {
+				activity_info = pm.getActivityInfo(task_info.topActivity, 0);
+			} catch(PackageManager.NameNotFoundException e) {
+				e.printStackTrace();
+				continue;
+			}
+			if(!activity_info.name.equals(activity_name)) continue;
+			//Toast.makeText(this, activity_info.name, Toast.LENGTH_SHORT).show();
+			int id = task_info.id;
+			//system_am.removeTask(id,0);
+			try {
+				removetask.invoke(system_am, Integer.valueOf(id), Integer.valueOf(0));
+			} catch(Exception e) {
+				e.printStackTrace();
+				(new AlertDialog.Builder(this)).setTitle(e.getClass().getName()).setMessage(e.getMessage()).show();
+				return;
+			}
+		}
+	}
+
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -253,7 +301,8 @@ public class ActivityControlActivity extends Activity implements View.OnClickLis
 				start_activity_from_app_process();
 				break;
 			case R.id.button_killall:
-				Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(this, "Not implemented", Toast.LENGTH_SHORT).show();
+				kill();
 				break;
 			case R.id.check_box_data_uri:
 				//Log.i("check_box_data_uri", String.valueOf(check_box_data_uri.isChecked()));
